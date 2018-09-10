@@ -9,13 +9,15 @@ import (
 // Config  config struct
 type Config struct {
 	SourceDSN   string                       `json:"source"`
-	DestDSN     string                       `json:"dest"`
+	DestDSNs    []string                     `json:"dests"`
 	AlterIgnore map[string]*AlterIgnoreTable `json:"alter_ignore"`
 	Tables      []string                     `json:"tables"`
 	Email       *EmailStruct                 `json:"email"`
 	ConfigPath  string
 	Sync        bool
 	Drop        bool
+	DestCount   int
+	CurrDestDSN string
 }
 
 func (cfg *Config) String() string {
@@ -62,8 +64,13 @@ func (cfg *Config) Check() {
 	if cfg.SourceDSN == "" {
 		log.Fatal("source dns is empty")
 	}
-	if cfg.DestDSN == "" {
+	if cfg.DestCount == 0 {
 		log.Fatal("dest dns is empty")
+	}
+	for _, d := range cfg.DestDSNs {
+		if d == "" {
+			log.Fatal("dest dns is empty")
+		}
 	}
 	//	log.Println("config:\n", cfg)
 }
@@ -102,12 +109,16 @@ func (cfg *Config) SendMailFail(errStr string) {
 		log.Println("email conf is empty,skip send mail")
 		return
 	}
+	var destDSNs string
+	for _, d := range cfg.DestDSNs {
+		destDSNs += d + " "
+	}
 	_host, _ := os.Hostname()
 	title := "[mysql-schema-sync][" + _host + "]failed"
 	body := "error:<font color=red>" + errStr + "</font><br/>"
 	body += "host:" + _host + "<br/>"
 	body += "config-file:" + cfg.ConfigPath + "<br/>"
-	body += "dest_dsn:" + cfg.DestDSN + "<br/>"
+	body += "dest_dsn:" + destDSNs + "<br/>"
 	pwd, _ := os.Getwd()
 	body += "pwd:" + pwd + "<br/>"
 	cfg.Email.SendMail(title, body)
@@ -121,6 +132,7 @@ func LoadConfig(confPath string) *Config {
 		log.Fatalln("load json conf:", confPath, "failed:", err)
 	}
 	cfg.ConfigPath = confPath
+	cfg.DestCount = len(cfg.DestDSNs)
 	//	if *mailTo != "" {
 	//		cfg.Email.To = *mailTo
 	//	}

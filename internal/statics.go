@@ -137,7 +137,7 @@ func (s *statics) sendMailNotice(cfg *Config) {
 		log.Println("no table change,skip send mail")
 		return
 	}
-	title := "[mysql_schema_sync] " + fmt.Sprintf("%d", alterTotal) + " tables change [" + dsnSort(cfg.DestDSN) + "]"
+	title := "[mysql_schema_sync] " + fmt.Sprintf("%d", alterTotal) + " tables change [" + dsnSort(cfg.CurrDestDSN) + "]"
 	body := ""
 
 	if !s.Config.Sync {
@@ -148,7 +148,7 @@ func (s *statics) sendMailNotice(cfg *Config) {
 	hostName, _ := os.Hostname()
 	body += "<h2>Info</h2>\n<pre>"
 	body += "  from : " + dsnSort(cfg.SourceDSN) + "\n"
-	body += "    to : " + dsnSort(cfg.DestDSN) + "\n"
+	body += "    to : " + dsnSort(cfg.CurrDestDSN) + "\n"
 	body += " alter : " + fmt.Sprintf("%d", len(s.tables)) + " tables\n"
 	body += "<font color=green>  sync : " + fmt.Sprintf("%t", s.Config.Sync) + "</font>\n"
 	if s.Config.Sync {

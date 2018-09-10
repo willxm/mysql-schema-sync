@@ -18,7 +18,7 @@ func NewSchemaSync(config *Config) *SchemaSync {
 	s := new(SchemaSync)
 	s.Config = config
 	s.SourceDb = NewMyDb(config.SourceDSN, "source")
-	s.DestDb = NewMyDb(config.DestDSN, "dest")
+	s.DestDb = NewMyDb(config.CurrDestDSN, "dest")
 	return s
 }
 

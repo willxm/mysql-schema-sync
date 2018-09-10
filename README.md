@@ -29,7 +29,7 @@ mysql表结构自动同步工具
       //source：同步源
       "source":"test:test@(127.0.0.1:3306)/test_0",
       //dest：待同步的数据库
-      "dest":"test:test@(127.0.0.1:3306)/test_1",
+      "dests":["test:test@(127.0.0.1:3306)/test_1"],
       //alter_ignore： 同步时忽略的字段和索引
       "alter_ignore":{
         "tb1*":{
@@ -53,7 +53,7 @@ mysql表结构自动同步工具
 
 #### json配置项说明
 source: 数据库同步源  
-dest:   待同步的数据库  
+dests:   待同步的数据库  
 tables： 数组，配置需要同步的表，为空则是不限制，eg: ["goods","order_*"]  
 alter_ignore： 忽略修改的配置，表名为tableName，可以配置 column 和 index，支持通配符 *  
 email ： 同步完成后发送邮件通知信息  
@@ -85,7 +85,7 @@ log存储在当前的log目录中。
 
 ### 参数说明
 <code>
-mysql-schema-sync [-conf] [-dest] [-source] [-sync] [-drop]
+mysql-schema-sync [-conf] [-dests] [-source] [-sync] [-drop]
 </code>
 
 说明：
@@ -93,7 +93,7 @@ mysql-schema-sync [-conf] [-dest] [-source] [-sync] [-drop]
 # mysql-schema-sync -help  
   -conf string
         配置文件名称
-  -dest string
+  -dests string
         mysql 同步源,eg test@(127.0.0.1:3306)/test_0
   -drop
         是否对本地多出的字段和索引进行删除 默认否
