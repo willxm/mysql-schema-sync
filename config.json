@@ -1,19 +1,5 @@
 {
-     "source":"test:test@(127.0.0.1:3306)/test",
-     "dests":"test:test@(127.0.0.1:3306)/test_1",
-     "alter_ignore":{
-        "tb1*":{
-            "column":["aaa","a*"],
-            "index":["aa"],
-            "foreign":[]
-        }
-     },
-     "tables":[],
-     "email":{
-          "send_mail":false,
-         "smtp_host":"smtp.163.com:25",
-         "from":"xxx@163.com",
-         "password":"xxx",
-         "to":"xxx@163.com"
-     }
+     "source":"root:123456@tcp(192.168.1.16:3307)/saas_tenant_a?charset=utf8mb4&loc=Asia%2FShanghai",
+     "dests":["root:123456@tcp(192.168.1.16:3307)/saas_tenant_b?charset=utf8mb4&loc=Asia%2FShanghai"],
+     "tables":[]
 }
